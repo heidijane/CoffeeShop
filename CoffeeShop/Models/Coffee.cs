@@ -2,7 +2,7 @@
 
 namespace CoffeeShop.Models
 {
-    public class BeanVariety
+    public class Coffee
     {
         public int Id { get; set; }
 
@@ -10,7 +10,8 @@ namespace CoffeeShop.Models
         [StringLength(50, MinimumLength = 3)]
         public string Title { get; set; }
 
-        [Required]
         public int BeanVarietyId { get; set; }
+
+        public BeanVariety BeanVariety { get; set; }
     }
 }
