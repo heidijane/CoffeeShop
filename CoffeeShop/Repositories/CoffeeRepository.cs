@@ -74,7 +74,7 @@ namespace CoffeeShop.Repositories
                                                b.[Name], b.Region, b.Notes 
                                         FROM Coffee c 
                                         JOIN BeanVariety b ON b.Id = c.BeanVarietyId
-                                        WHERE Id = @id;";
+                                        WHERE c.Id = @id;";
                     cmd.Parameters.AddWithValue("@id", id);
 
                     var reader = cmd.ExecuteReader();
@@ -139,6 +139,7 @@ namespace CoffeeShop.Repositories
                            SET Title = @title, 
                                BeanVarietyId = @beanVarietyId
                          WHERE Id = @id";
+                    cmd.Parameters.AddWithValue("@id", coffee.Id);
                     cmd.Parameters.AddWithValue("@title", coffee.Title);
                     cmd.Parameters.AddWithValue("@beanVarietyId", coffee.BeanVarietyId);
 
