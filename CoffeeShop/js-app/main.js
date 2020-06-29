@@ -1,5 +1,3 @@
-const url = "https://localhost:5001/api/beanvariety/";
-
 const varietyContainer = document.querySelector("#varietyContainer");
 
 let beanVarieties = [];
@@ -7,51 +5,38 @@ let beanVarieties = [];
 const button = document.querySelector("#run-button");
 const addVarietyButton = document.querySelector("#add-variety-button");
 
-/*
+/******
     Fetch functions
-*/
+*******/
 
 //get all bean varieties from the db
 function getAllBeanVarieties() {
-    return fetch(url).then(resp => resp.json());
+    return fetch("https://localhost:5001/api/beanvariety/")
+        .then(resp => resp.json())
+        .then(resp => beanVarieties = resp)
 }
 
 //add bean variety to the db
-const addBeanVariety = () => {
-    beanName = document.querySelector("#varietyAdd-name").value;
-    beanRegion = document.querySelector("#varietyAdd-region").value;
-    beanNotes = document.querySelector("#varietyAdd-notes").value;
-    if (beanNotes === "") {
-        beanNotes = null;
-    }
-
-    const newBeanVariety = {
-        "name": beanName,
-        "region": beanRegion,
-        "notes": beanNotes
-    }
-
+const addBeanVariety = (beanVariety) => {
     return fetch("https://localhost:5001/api/beanvariety", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(newBeanVariety)
+        body: JSON.stringify(beanVariety)
     })
         .then(getAllBeanVarieties)
         .then(renderVarieties)
 }
 
-/*
+/******
     Event Listeners
-*/
+*******/
 
 //click that triggers the function that renders the bean varieties to the DOM
 button.addEventListener("click", () => {
     getAllBeanVarieties()
         .then(response => {
-            console.log(response);
-            beanVarieties = response;
             renderVarieties();
         })
 });
@@ -63,18 +48,35 @@ addVarietyButton.addEventListener("click", event => {
 
 //click that runs when the add bean variety form is submitted
 varietyContainer.addEventListener("submit", event => {
+    event.preventDefault();
     if (event.target.id === "varietyAdd") {
-        event.preventDefault();
-        addBeanVariety();
+
+        //get values from the form
+        beanName = document.querySelector("#varietyAdd-name").value;
+        beanRegion = document.querySelector("#varietyAdd-region").value;
+        beanNotes = document.querySelector("#varietyAdd-notes").value;
+        if (beanNotes === "") {
+            beanNotes = null;
+        }
+
+        const newBeanVariety = {
+            "name": beanName,
+            "region": beanRegion,
+            "notes": beanNotes
+        }
+
+        addBeanVariety(newBeanVariety);
     }
 });
 
-/*
+/******
     Functions that render stuff on the DOM
-*/
+*******/
 
 //renders the bean varieties onto the DOM
 const renderVarieties = () => {
+    console.log("Rendering...");
+    console.log(beanVarieties);
     varietyContainer.innerHTML = "";
     varietyContainer.innerHTML += beanVarieties.map(variety => {
         return `
