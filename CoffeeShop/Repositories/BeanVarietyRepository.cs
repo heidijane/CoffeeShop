@@ -107,7 +107,7 @@ namespace CoffeeShop.Repositories
                     }
                     else
                     {
-                        cmd.Parameters.AddWithValue("@notes", variety.Name);
+                        cmd.Parameters.AddWithValue("@notes", variety.Notes);
                     }
 
                     variety.Id = (int)cmd.ExecuteScalar();

@@ -7,6 +7,46 @@ let beanVarieties = [];
 const button = document.querySelector("#run-button");
 const addVarietyButton = document.querySelector("#add-variety-button");
 
+/*
+    Fetch functions
+*/
+
+//get all bean varieties from the db
+function getAllBeanVarieties() {
+    return fetch(url).then(resp => resp.json());
+}
+
+//add bean variety to the db
+const addBeanVariety = () => {
+    beanName = document.querySelector("#varietyAdd-name").value;
+    beanRegion = document.querySelector("#varietyAdd-region").value;
+    beanNotes = document.querySelector("#varietyAdd-notes").value;
+    if (beanNotes === "") {
+        beanNotes = null;
+    }
+
+    const newBeanVariety = {
+        "name": beanName,
+        "region": beanRegion,
+        "notes": beanNotes
+    }
+
+    return fetch("https://localhost:5001/api/beanvariety", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newBeanVariety)
+    })
+        .then(getAllBeanVarieties)
+        .then(renderVarieties)
+}
+
+/*
+    Event Listeners
+*/
+
+//click that triggers the function that renders the bean varieties to the DOM
 button.addEventListener("click", () => {
     getAllBeanVarieties()
         .then(response => {
@@ -16,14 +56,24 @@ button.addEventListener("click", () => {
         })
 });
 
-function getAllBeanVarieties() {
-    return fetch(url).then(resp => resp.json());
-}
-
+//click that triggers the function that loads the add variety form on the DOM
 addVarietyButton.addEventListener("click", event => {
     renderAddVarietyForm();
 });
 
+//click that runs when the add bean variety form is submitted
+varietyContainer.addEventListener("submit", event => {
+    if (event.target.id === "varietyAdd") {
+        event.preventDefault();
+        addBeanVariety();
+    }
+});
+
+/*
+    Functions that render stuff on the DOM
+*/
+
+//renders the bean varieties onto the DOM
 const renderVarieties = () => {
     varietyContainer.innerHTML = "";
     varietyContainer.innerHTML += beanVarieties.map(variety => {
@@ -39,9 +89,10 @@ const renderVarieties = () => {
     }).join('');
 }
 
+//renders the add bean variety form onto the DOM
 const renderAddVarietyForm = () => {
     varietyContainer.innerHTML = `
-                <form class="container-sm m-2">
+                <form id="varietyAdd" class="container-sm m-2">
                     <h2 class="card-title">Add Bean Variety</h2>
                     <div class="form-group">
                         <label for="varietyAdd-name"></label>Name</label>
