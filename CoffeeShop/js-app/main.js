@@ -5,6 +5,8 @@ const varietyContainer = document.querySelector("#varietyContainer");
 let beanVarieties = [];
 
 const button = document.querySelector("#run-button");
+const addVarietyButton = document.querySelector("#add-variety-button");
+
 button.addEventListener("click", () => {
     getAllBeanVarieties()
         .then(response => {
@@ -17,6 +19,10 @@ button.addEventListener("click", () => {
 function getAllBeanVarieties() {
     return fetch(url).then(resp => resp.json());
 }
+
+addVarietyButton.addEventListener("click", event => {
+    renderAddVarietyForm();
+});
 
 const renderVarieties = () => {
     varietyContainer.innerHTML = "";
@@ -31,4 +37,25 @@ const renderVarieties = () => {
                 </div>
         `;
     }).join('');
+}
+
+const renderAddVarietyForm = () => {
+    varietyContainer.innerHTML = `
+                <form class="container-sm m-2">
+                    <h2 class="card-title">Add Bean Variety</h2>
+                    <div class="form-group">
+                        <label for="varietyAdd-name"></label>Name</label>
+                        <input type="text" class="form-control" id="varietyAdd-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="varietyAdd-region"></label>Region</label>
+                        <input type="text" class="form-control" id="varietyAdd-region">
+                    </div>
+                    <div class="form-group">
+                        <label for="varietyAdd-notes"></label>Notes</label>
+                        <textarea class="form-control" id="varietyAdd-notes" rows="3"></textarea>
+                    </div>
+                    <button id="varietyAdd-submit" type="submit" class="btn btn-primary">Submit</button>
+                </form>
+        `;
 }
