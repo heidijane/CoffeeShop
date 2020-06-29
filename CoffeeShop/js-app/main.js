@@ -75,7 +75,6 @@ varietyContainer.addEventListener("submit", event => {
 
 //renders the bean varieties onto the DOM
 const renderVarieties = () => {
-    console.log("Rendering...");
     console.log(beanVarieties);
     varietyContainer.innerHTML = "";
     varietyContainer.innerHTML += beanVarieties.map(variety => {
